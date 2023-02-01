@@ -1,18 +1,37 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import AddCommentForm from "./AddCommentForm";
 import Comments from "./Comments";
-import data from "../mockData/comments";
 
 const App = () => {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    setComments(data);
+    const fetchComments = async () => {
+      const response = await axios.get("/api/comments");
+      const data = response.data;
+      setComments(data);
+    };
+    fetchComments();
   }, []);
+
+  const handleSubmit = async (newComment, callback) => {
+    try {
+      const response = await axios.post("/api/comments", { ...newComment });
+      const data = response.data;
+      setComments(comments.concat(data));
+      if (callback) {
+        callback();
+      }
+    } catch (e) {
+      console.error("Errror");
+    }
+  };
+
   return (
     <div>
-      <Comments comments={comments} />
-      <AddCommentForm />
+      <Comments comments={comments} setComments={setComments} />
+      <AddCommentForm onSubmit={handleSubmit} />
     </div>
   );
 };
