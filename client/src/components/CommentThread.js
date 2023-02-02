@@ -1,13 +1,10 @@
-import axios from "axios";
+import commentServices from "../services/comment";
 import Comment from "./Comment";
 
 const CommentThread = ({ comment, setComments, comments }) => {
   const handleMoreReplies = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      `/api/comment_replies?comment_id=${comment.id}`
-    );
-    const data = response.data;
+    const data = await commentServices.getReplies(comment.id);
     setComments(
       comments.map((currentComment) => {
         if (currentComment.id === comment.id) {

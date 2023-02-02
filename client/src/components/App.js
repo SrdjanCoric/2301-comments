@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import commentServices from "../services/comment";
 import AddCommentForm from "./AddCommentForm";
 import Comments from "./Comments";
 
@@ -8,23 +8,17 @@ const App = () => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const response = await axios.get("/api/comments");
-      const data = response.data;
+      const data = await commentServices.getComments();
       setComments(data);
     };
     fetchComments();
   }, []);
 
   const handleSubmit = async (newComment, callback) => {
-    try {
-      const response = await axios.post("/api/comments", { ...newComment });
-      const data = response.data;
-      setComments(comments.concat(data));
-      if (callback) {
-        callback();
-      }
-    } catch (e) {
-      console.error("Errror");
+    const data = await commentServices.createComment(newComment);
+    setComments(comments.concat(data));
+    if (callback) {
+      callback();
     }
   };
 
