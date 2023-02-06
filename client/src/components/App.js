@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import commentServices from "../services/comment";
+import { getComments, createComment } from "../services/comment";
 import AddCommentForm from "./AddCommentForm";
 import Comments from "./Comments";
 
@@ -8,14 +8,14 @@ const App = () => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const data = await commentServices.getComments();
+      const data = await getComments();
       setComments(data);
     };
     fetchComments();
   }, []);
 
   const handleSubmit = async (newComment, callback) => {
-    const data = await commentServices.createComment(newComment);
+    const data = await createComment(newComment);
     setComments(comments.concat(data));
     if (callback) {
       callback();

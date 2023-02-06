@@ -1,10 +1,10 @@
-import commentServices from "../services/comment";
+import { getReplies } from "../services/comment";
 import Comment from "./Comment";
 
 const CommentThread = ({ comment, setComments, comments }) => {
   const handleMoreReplies = async (e) => {
     e.preventDefault();
-    const data = await commentServices.getReplies(comment.id);
+    const data = await getReplies(comment.id);
     setComments(
       comments.map((currentComment) => {
         if (currentComment.id === comment.id) {
